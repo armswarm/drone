@@ -1,0 +1,38 @@
+pipeline:
+  build:
+    image: armhfbuild/golang:1.6-alpine
+    commands:
+      - export OUTPUT_PATH=${PWD}
+      - apk add --no-cache git make gcc musl-dev sqlite sqlite-libs sqlite-dev
+      - git clone https://github.com/drone/drone.git $GOPATH/src/github.com/drone/drone
+      - cd $GOPATH/src/github.com/drone/drone
+      # patch
+      - sed -i 's/busybox:latest/armhf\/busybox:latest/' yaml/transform/pod.go
+      # original 'backend' step
+      - make deps gen
+      - make test test_postgres
+      #test_mysql
+      # original 'compile' step
+      - make build_static
+      - cp release/drone ${OUTPUT_PATH}
+    when:
+      event: push
+
+  docker:
+    repo: armswarm/drone
+    tag: [ "latest", "0.5.0", "0.5" ]
+    when:
+      branch: master
+      event: push
+
+services:
+  postgres:
+    image: armswarm/postgres:9.5.4
+    environment:
+      - POSTGRES_USER=postgres
+  # mysql:
+  #   image: mysql:5.6.27
+  #   environment:
+  #     - MYSQL_DATABASE=test
+  #     - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+  #
