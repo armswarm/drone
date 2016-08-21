@@ -10,8 +10,7 @@ pipeline:
       - sed -i 's/busybox:latest/armhf\/busybox:latest/' yaml/transform/pod.go
       # original 'backend' step
       - make deps gen
-      - make test test_postgres
-      #test_mysql
+      #- make test test_postgres test_mysql
       # original 'compile' step
       - make build_static
       - cp release/drone ${OUTPUT_PATH}
@@ -25,11 +24,11 @@ pipeline:
       branch: master
       event: push
 
-services:
-  postgres:
-    image: armswarm/postgres:9.5.4
-    environment:
-      - POSTGRES_USER=postgres
+# services:
+#   postgres:
+#     image: armswarm/postgres:9.5.4
+#     environment:
+#       - POSTGRES_USER=postgres
   # mysql:
   #   image: mysql:5.6.27
   #   environment:
