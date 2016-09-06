@@ -6,8 +6,6 @@ pipeline:
       - apk add --no-cache git make gcc musl-dev sqlite sqlite-libs sqlite-dev
       - git clone https://github.com/drone/drone.git $GOPATH/src/github.com/drone/drone
       - cd $GOPATH/src/github.com/drone/drone
-      # patch
-      - sed -i 's/busybox:latest/armhf\/busybox:latest/' yaml/transform/pod.go
       # original 'backend' step
       - make deps gen
       #- make test test_postgres test_mysql
