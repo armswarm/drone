@@ -17,6 +17,11 @@ pipeline:
 
   docker:
     repo: armswarm/drone
+    build_args:
+      - VCS_REF=${DRONE_COMMIT_SHA}
+      - VCS_URL=${DRONE_REPO_LINK}
+      - BUILD_DATE=${DRONE_BUILD_CREATED}
+      - PROJECT_NAME=${DRONE_REPO}
     tag: [ "latest", "0.5.0", "0.5" ]
     when:
       branch: master

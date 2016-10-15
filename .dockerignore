@@ -1,0 +1,5 @@
+.git
+.gitignore
+.drone.yml
+.drone.yml.sig
+README.md

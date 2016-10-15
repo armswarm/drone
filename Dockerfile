@@ -1,6 +1,21 @@
 FROM armhf/alpine:latest
+MAINTAINER armswarm
 
-LABEL repository="https://github.com/armswarm/drone"
+# metadata params
+ARG PROJECT_NAME
+ARG BUILD_DATE
+ARG VCS_URL
+ARG VCS_REF
+
+# metadata
+LABEL org.label-schema.schema-version="1.0" \
+      org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name=$PROJECT_NAME \
+      org.label-schema.url=$VCS_URL \
+      org.label-schema.vcs-url=$VCS_URL \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vendor="armswarm" \
+      org.label-schema.version="latest"
 
 EXPOSE 8000
 
