@@ -11,10 +11,13 @@ clone:
 pipeline:
   prepare:
     image: quay.io/armswarm/golang:1.8-alpine
+    environment:
+      - VERSION=master
     commands:
+      - echo "${VERSION}"
       - go get -d github.com/drone/drone/drone
       - cd $GOPATH/src/github.com/drone/drone
-      - git checkout v0.6.0
+      - git checkout "${VERSION}"
 
   test:
     image: quay.io/armswarm/golang:1.8-alpine
@@ -35,12 +38,11 @@ pipeline:
     environment:
       - CGO_ENABLED=0
     commands:
-    #   - apk add --no-cache sqlite sqlite-libs sqlite-dev
       - go build -ldflags "-extldflags '-static' -X github.com/drone/drone/version.VersionDev=build.${DRONE_BUILD_NUMBER}" -o drone github.com/drone/drone/drone
     when:
       event: push
 
-  docker:
+  publish:
     image: armswarmdrone/docker
     repo: quay.io/armswarm/drone
     tag: [ "0.6.0", "0.6", "latest" ]
@@ -48,7 +50,7 @@ pipeline:
       branch: master
       event: push
 
-  slack:
+   notify:
     image: armswarmdrone/slack
     when:
       status: [ failure, success ]
