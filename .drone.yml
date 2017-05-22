@@ -25,13 +25,13 @@ pipeline:
       - go get -u github.com/drone/drone-ui/dist
       - go test -cover $(go list github.com/drone/drone/... | grep -v /vendor/)
 
-  # test_postgres:
-  #   image: quay.io/armswarm/golang:1.8-alpine
-  #   environment:
-  #     - DATABASE_DRIVER=postgres
-  #     - DATABASE_CONFIG=host=postgres user=postgres dbname=postgres sslmode=disable
-  #   commands:
-  #     - go test github.com/drone/drone/store/datastore
+  test_postgres:
+    image: quay.io/armswarm/golang:1.8-alpine
+    environment:
+      - DATABASE_DRIVER=postgres
+      - DATABASE_CONFIG=host=postgres user=postgres dbname=postgres sslmode=disable
+    commands:
+      - go test github.com/drone/drone/store/datastore
 
   build:
     image: quay.io/armswarm/golang:1.8-alpine
@@ -55,8 +55,8 @@ pipeline:
     when:
       status: [ failure, success ]
 
-# services:
-#   postgres:
-#     image: armswarm/postgres:9.5.4
-#     environment:
-#       - POSTGRES_USER=postgres
+services:
+  postgres:
+    image: quay.io/armswarm/postgres:9.6.2
+    environment:
+      - POSTGRES_USER=postgres
