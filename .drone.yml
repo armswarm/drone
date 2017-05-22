@@ -13,7 +13,7 @@ pipeline:
   prepare:
     image: quay.io/armswarm/golang:1.8-alpine
     commands:
-      - go get -d github.com/drone/drone
+      - go get -d github.com/drone/drone/drone
 
   test:
     image: quay.io/armswarm/golang:1.8-alpine
