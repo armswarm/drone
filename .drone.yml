@@ -32,6 +32,8 @@ pipeline:
 
   build:
     image: quay.io/armswarm/golang:1.8-alpine
+    environment:
+      - CGO_ENABLED=0
     commands:
     #   - apk add --no-cache sqlite sqlite-libs sqlite-dev
       - go build -ldflags "-extldflags '-static' -X github.com/drone/drone/version.VersionDev=build.${DRONE_BUILD_NUMBER}" -o drone github.com/drone/drone/drone
