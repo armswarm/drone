@@ -38,7 +38,7 @@ pipeline:
     environment:
       - CGO_ENABLED=0
     commands:
-      - go build -ldflags "-extldflags '-static' -X github.com/drone/drone/version.VersionDev=build.${DRONE_BUILD_NUMBER}" -o drone github.com/drone/drone/drone
+      - go build -ldflags "-X github.com/drone/drone/version.VersionDev=build.${DRONE_BUILD_NUMBER}" -o drone github.com/drone/drone/drone
     when:
       event: push
 
