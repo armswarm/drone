@@ -57,6 +57,6 @@ pipeline:
 
 services:
   postgres:
-    image: quay.io/armswarm/postgres:9.6.2
+    image: quay.io/armswarm/postgres:9.6-alpine
     environment:
       - POSTGRES_USER=postgres
