@@ -1,9 +1,8 @@
 platform: linux/arm
 
-
 workspace:
-  base: /go/src
-  path: github.com/armswarm/drone
+  base: /go
+  path: src/github.com/armswarm/drone
 
 clone:
   git:
@@ -14,6 +13,8 @@ pipeline:
     image: quay.io/armswarm/golang:1.8-alpine
     commands:
       - go get -d github.com/drone/drone/drone
+      - cd $GOPATH/src/github.com/drone/drone
+      - git checkout v0.6.0
 
   test:
     image: quay.io/armswarm/golang:1.8-alpine
@@ -32,7 +33,7 @@ pipeline:
   build:
     image: quay.io/armswarm/golang:1.8-alpine
     commands:
-      - apk add --no-cache git make gcc musl-dev sqlite sqlite-libs sqlite-dev
+    #   - apk add --no-cache sqlite sqlite-libs sqlite-dev
       - go build -ldflags "-extldflags '-static' -X github.com/drone/drone/version.VersionDev=build.${DRONE_BUILD_NUMBER}" -o drone github.com/drone/drone/drone
     when:
       event: push
