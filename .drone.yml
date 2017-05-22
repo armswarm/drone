@@ -1,33 +1,52 @@
+platform: linux/arm
+
+
+workspace:
+  base: /go/src
+  path: github.com/armswarm/drone
+
+clone:
+  git:
+    image: armswarmdrone/git
+
 pipeline:
-  build:
-    image: armhfbuild/golang:1.6-alpine
+  prepare:
+    image: quay.io/armswarm/golang:1.8-alpine
     commands:
-      - export OUTPUT_PATH=${PWD}
+      - go get -d github.com/drone/drone
+
+  test:
+    image: quay.io/armswarm/golang:1.8-alpine
+    commands:
+      - go get -u github.com/drone/drone-ui/dist
+      - go test -cover $(go list github.com/drone/drone/... | grep -v /vendor/)
+
+  # test_postgres:
+  #   image: quay.io/armswarm/golang:1.8-alpine
+  #   environment:
+  #     - DATABASE_DRIVER=postgres
+  #     - DATABASE_CONFIG=host=postgres user=postgres dbname=postgres sslmode=disable
+  #   commands:
+  #     - go test github.com/drone/drone/store/datastore
+
+  build:
+    image: quay.io/armswarm/golang:1.8-alpine
+    commands:
       - apk add --no-cache git make gcc musl-dev sqlite sqlite-libs sqlite-dev
-      - git clone https://github.com/drone/drone.git $GOPATH/src/github.com/drone/drone
-      - cd $GOPATH/src/github.com/drone/drone
-      # original 'backend' step
-      - make deps gen
-      #- make test test_postgres test_mysql
-      # original 'compile' step
-      - make build_static
-      - cp release/drone ${OUTPUT_PATH}
+      - go build -ldflags "-extldflags '-static' -X github.com/drone/drone/version.VersionDev=build.${DRONE_BUILD_NUMBER}" -o drone github.com/drone/drone/drone
     when:
       event: push
 
   docker:
-    repo: armswarm/drone
-    build_args:
-      - VCS_REF=${DRONE_COMMIT_SHA}
-      - VCS_URL=${DRONE_REPO_LINK}
-      - BUILD_DATE=${DRONE_BUILD_CREATED}
-      - PROJECT_NAME=${DRONE_REPO}
-    tag: [ "latest", "0.5.0", "0.5" ]
+    image: armswarmdrone/docker
+    repo: quay.io/armswarm/drone
+    tag: [ "0.6.0", "0.6", "latest" ]
     when:
       branch: master
       event: push
 
   slack:
+    image: armswarmdrone/slack
     when:
       status: [ failure, success ]
 
@@ -36,9 +55,3 @@ pipeline:
 #     image: armswarm/postgres:9.5.4
 #     environment:
 #       - POSTGRES_USER=postgres
-#   # mysql:
-#   #   image: mysql:5.6.27
-#   #   environment:
-#   #     - MYSQL_DATABASE=test
-#   #     - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-#   #
