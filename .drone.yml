@@ -50,7 +50,7 @@ pipeline:
       branch: master
       event: push
 
-   notify:
+  notify:
     image: armswarmdrone/slack
     when:
       status: [ failure, success ]
