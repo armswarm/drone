@@ -45,7 +45,7 @@ pipeline:
   publish:
     image: armswarmdrone/docker
     repo: quay.io/armswarm/drone
-    tag: [ "0.7.0", "0.7", "latest" ]
+    tag: [ "0.7.1", "0.7", "latest" ]
     when:
       branch: master
       event: push
