@@ -15,7 +15,7 @@ pipeline:
       - VERSION=0.8.0
     commands:
       - echo "$${VERSION}"
-      - go get -d github.com/drone/drone/drone
+      - go get -d github.com/drone/drone/...
       - cd $GOPATH/src/github.com/drone/drone
       - git checkout "$${VERSION}"
 
