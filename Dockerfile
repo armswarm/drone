@@ -1,6 +1,6 @@
 FROM quay.io/armswarm/alpine:3.6
 
-EXPOSE 8000
+EXPOSE 8000 9000 80 443
 
 ENV DATABASE_DRIVER=sqlite3 \
     DATABASE_CONFIG=/var/lib/drone/drone.sqlite \
@@ -9,7 +9,6 @@ ENV DATABASE_DRIVER=sqlite3 \
 
 RUN apk add --no-cache ca-certificates
 
-ADD drone /drone
+ADD drone-server /bin/
 
-ENTRYPOINT [ "/drone" ]
-CMD [ "server" ]
+ENTRYPOINT ["/bin/drone-server"]
