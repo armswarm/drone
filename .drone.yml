@@ -44,7 +44,7 @@ pipeline:
       - CGO_ENABLED=0
     commands:
       - go build -ldflags '-extldflags "-static" -X github.com/drone/drone/version.VersionDev=build.'$${DRONE_BUILD_NUMBER} -o drone-server github.com/drone/drone/cmd/drone-server
-      - go build -ldflags '-X github.com/drone/drone/version.VersionDev=build.'$${DRONE_BUILD_NUMBER}                       -o drone-agent  github.com/drone/drone/cmd/drone-agent
+      - go build -ldflags '-X github.com/drone/drone/version.VersionDev=build.'$${DRONE_BUILD_NUMBER} -o drone-agent github.com/drone/drone/cmd/drone-agent
     when:
       event: [ push, tag ]
 
@@ -63,7 +63,7 @@ pipeline:
     secrets: [ docker_registry, docker_username, docker_password ]
     repo: quay.io/armswarm/drone
     dockerfile: Dockerfile.agent
-    tag: [ "0.8.0", "0.8", "latest" ]
+    tag: [ "0.8.0-agent", "0.8-agent", "latest-agent" ]
     when:
       branch: master
       event: push
