@@ -34,7 +34,7 @@ pipeline:
     image: quay.io/armswarm/golang:1.9-alpine
     environment:
       - DATABASE_DRIVER=postgres
-      - DATABASE_CONFIG=host=localhost user=postgres dbname=postgres sslmode=disable
+      - DATABASE_CONFIG=host=postgres user=postgres dbname=postgres sslmode=disable
     commands:
       - go test github.com/drone/drone/store/datastore
 
