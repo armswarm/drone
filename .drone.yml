@@ -12,7 +12,7 @@ pipeline:
   fetch_upstream:
     image: quay.io/armswarm/golang:1.9-alpine
     environment:
-      - VERSION=0.8.0
+      - VERSION=v0.8.0
     commands:
       - echo "$${VERSION}"
       - go get -d github.com/drone/drone/...
