@@ -1,0 +1,13 @@
+FROM quay.io/armswarm/alpine:3.6
+
+EXPOSE 3000
+
+ENV GODEBUG=netdns=go \
+    DRONE_PLATFORM=linux/arm
+
+RUN apk add --no-cache ca-certificates
+
+ADD drone-agent /bin/
+
+HEALTHCHECK CMD ["/bin/drone-agent", "ping"]
+ENTRYPOINT ["/bin/drone-agent"]
