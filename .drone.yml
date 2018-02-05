@@ -12,7 +12,7 @@ pipeline:
   fetch_upstream:
     image: quay.io/armswarm/golang:1.9-alpine
     environment:
-      - VERSION=v0.8.1
+      - VERSION=v0.8.4
     commands:
       - echo "$${VERSION}"
       - go get -d github.com/drone/drone/...
@@ -53,7 +53,7 @@ pipeline:
     secrets: [ docker_registry, docker_username, docker_password ]
     repo: quay.io/armswarm/drone
     dockerfile: Dockerfile
-    tag: [ "0.8.1", "0.8", "latest" ]
+    tag: [ "0.8.4", "0.8", "latest" ]
     when:
       branch: master
       event: push
@@ -63,7 +63,7 @@ pipeline:
     secrets: [ docker_registry, docker_username, docker_password ]
     repo: quay.io/armswarm/drone
     dockerfile: Dockerfile.agent
-    tag: [ "0.8.1-agent", "0.8-agent", "latest-agent" ]
+    tag: [ "0.8.4-agent", "0.8-agent", "latest-agent" ]
     when:
       branch: master
       event: push
@@ -76,6 +76,6 @@ pipeline:
 
 services:
   postgres:
-    image: quay.io/armswarm/postgres:9.6-alpine
+    image: quay.io/armswarm/postgres:10.1-alpine
     environment:
       - POSTGRES_USER=postgres

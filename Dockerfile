@@ -1,4 +1,4 @@
-FROM quay.io/armswarm/alpine:3.6
+FROM quay.io/armswarm/alpine:3.7
 
 EXPOSE 8000 9000 80 443
 
